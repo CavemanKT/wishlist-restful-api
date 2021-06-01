@@ -1,0 +1,29 @@
+<%- contentFor('meta') %>
+<title>Wishlist Index</title>
+
+<%- contentFor('styles') %>
+
+<%- contentFor('scripts') %>
+
+<%- contentFor('body') %>
+<div class="container my-3 text-center">
+  <h1 class="mb-3">Wishlists</h1>
+
+  <a class="btn btn-success btn-sm" href="/wishlists/new">New</a>
+
+  <% if (wishlists.length > 0) { %>
+    <ul class="list-unstyled">
+      <% wishlists.forEach(function(wishlist){ %>
+        <li class="my-1">
+          <a class="font-weight-bold" href="/wishlists/<%= wishlist.id %>"><%= wishlist.title %></a>
+          <a class="btn btn-info btn-sm" href="/wishlists/<%= wishlist.id %>/edit"><i class="fas fa-edit"></i></a>
+          <form class="d-inline" action="/wishlists/<%= wishlist.id %>?_method=DELETE" method="POST">
+            <button class="btn btn-danger btn-sm" type="submit"><i class="fas fa-trash"></i></button>
+          </form>
+        </li>
+        <% }) %>
+    </ul>
+  <% } else { %>
+    <div>No Tweets</div>
+  <% } %>
+</div>

@@ -1,0 +1,21 @@
+<%- contentFor('meta') %>
+<title>Wishlist Edit</title>
+
+<%- contentFor('styles') %>
+
+<%- contentFor('scripts') %>
+<script src="/js/wishlists/input-control.js" defer></script>
+
+<%- contentFor('body') %>
+<div class="container my-3">
+  <div class="text-center mb-3">
+    <h1 class="mb-3"><%= wishlist.title %></h1>
+    <h2><%= wishlist.createdAt.toISOString().slice(0, 10) %></h2>
+  </div>
+
+  <div class="row">
+    <div class="col-12 col-sm-10 offset-sm-1 col-md-6 offset-md-3">
+      <%- include('../_partials/wishlists/form', { action: `/wishlists/${wishlist.id}?_method=PUT` }) %>
+    </div>
+  </div>
+</div>

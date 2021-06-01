@@ -1,0 +1,39 @@
+<%- contentFor('meta') %>
+<title>Wishlist Show</title>
+
+<%- contentFor('styles') %>
+
+<%- contentFor('scripts') %>
+
+<%- contentFor('body') %>
+<div class="container my-3 text-center">
+  <div class="text-center mb-3">
+    <h1 class="mb-3"><%= wishlist.title %></h1>
+    <h2 class="mb-3"><%= wishlist.description%></h2>
+    <h3 class="mb-3"><%= wishlist.createdAt.toISOString().slice(0, 10) %></h3>
+
+    <a class="btn btn-info btn-sm" href="/wishlists/<%= wishlist.id %>/edit"><i class="fas fa-edit"></i></a>
+    <form class="d-inline" action="/wishlists/<%= wishlist.id %>?_method=DELETE" method="POST">
+      <button class="btn btn-danger btn-sm" type="submit"><i class="fas fa-trash"></i></button>
+    </form>
+  </div>
+
+  <% if (wishlist.WishlistItems.length > 0) { %>
+    <ul class="list-group">
+      <% wishlist.WishlistItems.forEach(function(item) { %>
+        <li class="list-group-item">
+          <span class="<%= (item.received ? 'text-decloration-through' : '') %>"><%= item.name %></span>
+          <% for (let i = 0; i < 5; i++) { %>
+            <% if (i < item.importance) { %>
+              <i class="fas fa-star"></i>
+            <% } else { %>
+              <i class="far fa-star"></i>
+            <% } %>
+          <% } %>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <div>No Items</div>
+  <% } %>
+</div>

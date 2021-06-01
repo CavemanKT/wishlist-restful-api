@@ -1,0 +1,45 @@
+<li class="list-group-item">
+  <button class="btn btn-danger btn-sm delete-btn float-right" type="button"><i class="fas fa-trash"></i></button>
+  <h3 class="text-center">Item <span><%= index + 1 %></span></h3>
+
+  <input class="form-control" type="text" name="WishlistItems[<%= index %>][id]" value="<%= item.id %>" hidden>
+
+  <div class="form-group">
+    <label>Name</label>
+    <input
+      class="form-control <%= formErrors.WishlistItems && formErrors.WishlistItems[index] && formErrors.WishlistItems[index].name ? 'is-invalid' : '' %>"
+      type="text"
+      name="WishlistItems[<%= index %>][name]"
+      value="<%= item.name %>"
+      required
+    >
+    <div class="invalid-feedback"><%= (formErrors.WishlistItems && formErrors.WishlistItems[index] && formErrors.WishlistItems[index].name) || 'Name is Required' %></div>
+  </div>
+
+  <div class="form-group">
+    <label>Importance</label>
+    <select
+      class="custom-select <%= formErrors.WishlistItems && formErrors.WishlistItems[index] && formErrors.WishlistItems[index].importance ? 'is-invalid' : '' %>"
+      name="WishlistItems[<%= index %>][importance]"
+      value="<%= item.importance %>"
+    >
+      <% for (let i = 0; i < 5; i++) { %>
+        <option <%= item.importance == i + 1 ? 'selected' : '' %>><%= i + 1%></option>
+      <% } %>
+    </select>
+    <div class="invalid-feedback"><%= (formErrors.WishlistItems && formErrors.WishlistItems[index] && formErrors.WishlistItems[index].importance) || 'Importance is Required' %></div>
+  </div>
+
+  <div class="form-check">
+    <input
+      id="received-<%= index %>"
+      class="form-check-input <% formErrors.WishlistItems && formErrors.WishlistItems[index] && formErrors.WishlistItems[index].importance ? 'is-invalid' : '' %>"
+      type="checkbox"
+      name="WishlistItems[<%= index %>][received]" <%= item.received ? 'checked' : '' %>
+    >
+    <label class="form-check-label" for="received-<%= index %>">
+      Received
+    </label>
+    <div class="invalid-feedback"><%= (formErrors.WishlistItems && formErrors.WishlistItems[index] && formErrors.WishlistItems[index].importance) || 'Importance is Required' %></div>
+  </div>
+</li>

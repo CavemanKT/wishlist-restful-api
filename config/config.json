@@ -1,0 +1,7 @@
+{
+  "development": {
+    "database": "lab_restful_api_development",
+    "host": "localhost",
+    "dialect": "postgres"
+  }
+}

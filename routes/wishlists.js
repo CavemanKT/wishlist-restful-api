@@ -1,0 +1,132 @@
+const { body, validationResult } = require('express-validator')
+const { Wishlist, WishlistItem } = require('../models')
+const { Router } = require('express')
+const { encodeArray, decodeArrayToObject } = require('../services/validation-query')
+const router = Router()
+
+// Validations
+const permittedChangeParams = {
+  Wishlist: ['title', 'description', 'WishlistItem.name', 'WishlistItem.importance', 'WishlistItem.received'],
+  WishlistItems: ['name', 'importance', 'received']
+}
+const changeValidation = [
+  body('title').isString().withMessage('Title must be a String').notEmpty().withMessage('Title is Required'),
+  body('description').isString().withMessage('Description must be a String').notEmpty().withMessage('Description is Required'),
+  body('WishlistItems').isArray({ min: 1}).withMessage('Wishlist must have at least 1 Item'),
+  body('WishlistItems.*.name').isString().withMessage('Item Name must be a String').notEmpty().withMessage('Item Name is Required'),
+  body('WishlistItems.*.importance').toInt().isInt({ min: 0, max: 5 }).withMessage('Item Important must be Between 0 and 5'),
+  body('WishlistItems.*.received').default(false).toBoolean().isBoolean().withMessage('Item Received must be a Checked or Un-Checked')
+]
+
+// INDEX GET /wishlists
+router.get('/', async function(req, res) {
+  const wishlists = await Wishlist.findAll({
+    order: [['createdAt', 'ASC']]
+  })
+  res.render('wishlists/index', { wishlists })
+})
+
+// CREATE POST /wishlists
+router.post('/', changeValidation, async function(req, res) {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) return res.redirect(encodeArray('/wishlists/new', errors))
+
+  const { body: wishlistParams } = req
+  const newWishlist = await Wishlist.create(wishlistParams, {
+    fields: permittedChangeParams.Wishlist,
+    include: {
+      association: Wishlist.WishlistItems
+    }
+  })
+
+  res.redirect(`/wishlists/${newWishlist.id}`)
+})
+
+// NEW GET /wishlists/new
+router.get('/new', async function(req, res) {
+  const { query: { errors } } = req
+  const wishlist = await Wishlist.build({
+    WishlistItems: []
+  }, {
+    include: Wishlist.WishlistItems
+  })
+  wishlist.WishlistItems.push(await WishlistItem.build())
+
+  res.render('wishlists/new', { wishlist, formErrors: decodeArrayToObject(errors) })
+})
+
+// SHOW GET /wishlists/:id
+router.get('/:id', async function(req, res) {
+  const { params: { id } } = req
+  const wishlist = await Wishlist.findOne({
+    where: { id: Number(id) || 0 },
+    include: {
+      association: Wishlist.WishlistItems
+    },
+    order: [['WishlistItems', 'createdAt', 'ASC']]
+  })
+
+  if (!wishlist) return res.render('not-found', { message: `Wishlist of ID ${id} not found!` })
+
+  res.render('wishlists/show', { wishlist })
+})
+
+// UPDATE PUT /wishlists/:id
+router.put('/:id', changeValidation, async function(req, res) {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) return res.redirect(encodeArray(`/wishlists/${req.params.id}/edit`, errors))
+
+  const {
+    params: { id: WishlistId },
+    body: { WishlistItems: itemsParams, ...wishlistParams }
+  } = req
+  const wishlist = await Wishlist.findOne({
+    where: { id: WishlistId },
+    include: Wishlist.WishlistItems
+  })
+
+  await wishlist.update(wishlistParams, { fields: permittedChangeParams.Wishlist })
+
+  await wishlist.setWishlistItems([])
+  itemsParams.forEach(async function({ id: ItemId, ...itemParams }) {
+    const wishlistItem = ItemId ? await WishlistItem.findOrCreate({ where: { id: ItemId } }) : null
+    await wishlistItem.update({ ...itemParams, WishlistId }, { fields: permittedChangeParams.WishlistItems })
+  })
+  await WishlistItem.destroy({ where: { WishlistId: null } })
+
+  res.redirect(`/wishlists/${wishlist.id}`)
+})
+
+// EDIT GET /wishlists/:id/edit
+router.get('/:id/edit', async function(req, res) {
+  const { params: { id }, query: { errors } } = req
+  const wishlist = await Wishlist.findOne({
+    where: { id: Number(id) || 0 },
+    include: Wishlist.WishlistItems
+  })
+
+  if (!wishlist) return res.render('not-found', { message: `Wishlist of ID ${id} not found!` })
+
+  res.render('wishlists/edit', { wishlist, formErrors: decodeArrayToObject(errors) })
+})
+
+// DESTROY DELETE /wishlists/:id
+router.delete('/:id', async function(req, res) {
+  const { params: { id } } = req
+  const wishlist = await Wishlist.findOne({
+    where: { id: Number(id) || 0 },
+    include: {
+      association: Wishlist.WishlistItems
+    }
+  })
+
+  if (!wishlist) return res.render('not-found', { message: `Wishlist of ID ${id} not found!` })
+
+  await wishlist.setWishlistItems([])
+  await wishlist.destroy()
+  await WishlistItem.destroy({ where: { WishlistId: null } })
+
+  res.redirect('/wishlists')
+})
+
+module.exports = router
