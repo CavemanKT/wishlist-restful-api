@@ -7,6 +7,13 @@
   - [Routes & Controller & Data & Views](#routes--controller--data--views)
 - [Bonus](#bonus)
 - [Deliverables](#deliverables)
+  - [Home Page](#home-page)
+  - [Wishlists Index Page](#wishlists-index-page)
+  - [Wishlists Show Page](#wishlists-show-page)
+  - [Wishlists New Page & Edit Page Before Submit](#wishlists-new-page--edit-page-before-submit)
+  - [Wishlists New Page & Edit Page After Submit](#wishlists-new-page--edit-page-after-submit)
+  - [Not Found Page When Wishlist Is Not Found](#not-found-page-when-wishlist-is-not-found)
+  - [Not Found Page When No Route Found](#not-found-page-when-no-route-found)
 
 # Additional Resources
 - [Sequelize Associations](https://sequelize.org/master/manual/assocs.html)
@@ -99,6 +106,28 @@
 - Not Found: `Any Other Pages Not Defined`
 
 # Bonus
+- Add a ordering for `createdAt` field in `ASC` order for `Wishlist` in **Wishlist Index** controller
+- Add a ordering for `createdAt` field in `ASC` order for `WishlistItems` in **Wishlist Show** controller
+- Use [Bootstrap Form Validation](https://getbootstrap.com/docs/4.6/components/forms/#custom-styles) to add UI validations in conjunction with [Express Validator Redirection Error Messages](https://github.com/dented-academy/fswdi-curriculum/blob/master/unit2/2.1/restful-api/README.md#controller-level-validation-setup)
 
 # Deliverables
+## Home Page
+![Screen](https://i.imgur.com/a1TUGef.png)
 
+## Wishlists Index Page
+![Screen](https://i.imgur.com/LvZv9i7.png)
+
+## Wishlists Show Page
+![Screen](https://i.imgur.com/r8Ae1QJ.png)
+
+## Wishlists New Page & Edit Page Before Submit
+![Screen](https://i.imgur.com/1jQuFbc.png)
+
+## Wishlists New Page & Edit Page After Submit
+![Screen](https://i.imgur.com/lhqmT0W.png)
+
+## Not Found Page When Wishlist Is Not Found
+![Screen](https://i.imgur.com/doynxqF.png)
+
+## Not Found Page When No Route Found
+![Screen](https://i.imgur.com/AhwuIxU.png)
