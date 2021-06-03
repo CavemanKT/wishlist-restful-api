@@ -106,8 +106,8 @@
 - Not Found: `Any Other Pages Not Defined`
 
 # Bonus
-- Add a ordering for `createdAt` field in `ASC` order for `Wishlist` in **Wishlist Index** controller
-- Add a ordering for `createdAt` field in `ASC` order for `WishlistItems` in **Wishlist Show** controller
+- Add a ordering for `createdAt` field in `DESC` order for `Wishlist` in **Wishlist Index** controller
+- Add a ordering for `createdAt` field in `DESC` order for `WishlistItems` in **Wishlist Show** controller
 - Use [Bootstrap Form Validation](https://getbootstrap.com/docs/4.6/components/forms/#custom-styles) to add UI validations in conjunction with [Express Validator Redirection Error Messages](https://github.com/dented-academy/fswdi-curriculum/blob/master/unit2/2.1/restful-api/README.md#controller-level-validation-setup)
 
 # Deliverables
