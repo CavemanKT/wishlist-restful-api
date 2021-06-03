@@ -21,7 +21,7 @@ const changeValidation = [
 // INDEX GET /wishlists
 router.get('/', async function(req, res) {
   const wishlists = await Wishlist.findAll({
-    order: [['createdAt', 'ASC']]
+    order: [['createdAt', 'DESC']]
   })
   res.render('wishlists/index', { wishlists })
 })
@@ -63,7 +63,7 @@ router.get('/:id', async function(req, res) {
     include: {
       association: Wishlist.WishlistItems
     },
-    order: [['WishlistItems', 'createdAt', 'ASC']]
+    order: [['WishlistItems', 'createdAt', 'DESC']]
   })
 
   if (!wishlist) return res.render('not-found', { message: `Wishlist of ID ${id} not found!` })
