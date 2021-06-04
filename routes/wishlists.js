@@ -28,10 +28,10 @@ router.get('/', async function(req, res) {
 
 // CREATE POST /wishlists
 router.post('/', changeValidation, async function(req, res) {
+  const { body: wishlistParams } = req
   const errors = validationResult(req)
   if (!errors.isEmpty()) return res.redirect(encodeArray('/wishlists/new', errors))
 
-  const { body: wishlistParams } = req
   const newWishlist = await Wishlist.create(wishlistParams, {
     fields: permittedChangeParams.Wishlist,
     include: {
@@ -71,15 +71,34 @@ router.get('/:id', async function(req, res) {
   res.render('wishlists/show', { wishlist })
 })
 
+// DESTROY DELETE /wishlists/:id
+router.delete('/:id', async function(req, res) {
+  const { params: { id } } = req
+  const wishlist = await Wishlist.findOne({
+    where: { id: Number(id) || 0 },
+    include: {
+      association: Wishlist.WishlistItems
+    }
+  })
+
+  if (!wishlist) return res.render('not-found', { message: `Wishlist of ID ${id} not found!` })
+
+  await wishlist.setWishlistItems([])
+  await wishlist.destroy()
+  await WishlistItem.destroy({ where: { WishlistId: null } })
+
+  res.redirect('/wishlists')
+})
+
 // UPDATE PUT /wishlists/:id
 router.put('/:id', changeValidation, async function(req, res) {
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) return res.redirect(encodeArray(`/wishlists/${req.params.id}/edit`, errors))
-
   const {
     params: { id: WishlistId },
     body: { WishlistItems: itemsParams, ...wishlistParams }
   } = req
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) return res.redirect(encodeArray(`/wishlists/${WishlistId}/edit`, errors))
+
   const wishlist = await Wishlist.findOne({
     where: { id: WishlistId },
     include: Wishlist.WishlistItems
@@ -108,25 +127,6 @@ router.get('/:id/edit', async function(req, res) {
   if (!wishlist) return res.render('not-found', { message: `Wishlist of ID ${id} not found!` })
 
   res.render('wishlists/edit', { wishlist, formErrors: decodeArrayToObject(errors) })
-})
-
-// DESTROY DELETE /wishlists/:id
-router.delete('/:id', async function(req, res) {
-  const { params: { id } } = req
-  const wishlist = await Wishlist.findOne({
-    where: { id: Number(id) || 0 },
-    include: {
-      association: Wishlist.WishlistItems
-    }
-  })
-
-  if (!wishlist) return res.render('not-found', { message: `Wishlist of ID ${id} not found!` })
-
-  await wishlist.setWishlistItems([])
-  await wishlist.destroy()
-  await WishlistItem.destroy({ where: { WishlistId: null } })
-
-  res.redirect('/wishlists')
 })
 
 module.exports = router
