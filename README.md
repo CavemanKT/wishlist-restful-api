@@ -95,8 +95,12 @@
       - Update the target `Wishlist` with **title** & **description**
       - Un-associate all WishlistItems
       - For all the `WishlistItems` data
-        - Find the target `WishlistItem`. Use `Model.findOrCreate()`
-        - Update the found `WishlistItem`
+        - Find the target `WishlistItem`
+        - If found
+          - Create a new `WishlistItem`
+        - If not found
+          - Update the found `WishlistItem`
+        - Associate the `WishlistItem` to `Wishlist` (You can use `.addWishlistItem()` or add `WishlistId` when creating/updating item)
       - Destroy all WishlistItems that does not have an association
       - Redirect to `/wishlists/:id`
   - Edit: `GET /wishlists/:id/edit`
