@@ -104,6 +104,7 @@ router.put('/:id', changeValidation, async function(req, res) {
     where: { id: WishlistId },
     include: Wishlist.WishlistItems
   })
+  if (!wishlist) return res.render('not-found', { message: `Wishlist of ID ${id} not found!` })
 
   await wishlist.update(wishlistParams, { fields: permittedChangeParams.Wishlist })
 
