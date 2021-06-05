@@ -1,7 +1,8 @@
 const { body, validationResult } = require('express-validator')
 const { Wishlist, WishlistItem } = require('../models')
-const { Router } = require('express')
 const { encodeArray, decodeArrayToObject } = require('../services/validation-query')
+
+const { Router } = require('express')
 const router = Router()
 
 // Validations
