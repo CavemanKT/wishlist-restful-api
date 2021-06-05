@@ -108,8 +108,15 @@ router.put('/:id', changeValidation, async function(req, res) {
 
   await wishlist.setWishlistItems([])
   itemsParams.forEach(async function({ id: ItemId, ...itemParams }) {
-    const wishlistItem = ItemId ? await WishlistItem.findOrCreate({ where: { id: ItemId } }) : null
-    await wishlistItem.update({ ...itemParams, WishlistId }, { fields: permittedChangeParams.WishlistItems })
+    let wishlistItem = await WishlistItem.findOne({ where: { id: Number(ItemId) || 0 } })
+
+    if (wishlistItem) {
+      await wishlistItem.update(itemParams)
+    } else {
+      wishlistItem = await WishlistItem.create(itemParams)
+    }
+
+    await wishlist.addWishlistItem(wishlistItem)
   })
   await WishlistItem.destroy({ where: { WishlistId: null } })
 
