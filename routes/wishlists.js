@@ -111,9 +111,9 @@ router.put('/:id', changeValidation, async function(req, res) {
     let wishlistItem = await WishlistItem.findOne({ where: { id: Number(ItemId) || 0 } })
 
     if (wishlistItem) {
-      await wishlistItem.update(itemParams)
+      await wishlistItem.update(itemParams, { fields: permittedChangeParams.WishlistItems })
     } else {
-      wishlistItem = await WishlistItem.create(itemParams)
+      wishlistItem = await WishlistItem.create(itemParams, { fields: permittedChangeParams.WishlistItems })
     }
 
     await wishlist.addWishlistItem(wishlistItem)
