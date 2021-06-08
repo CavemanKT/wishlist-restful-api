@@ -34,7 +34,7 @@
 - Change to branch `ajax-master`
 - Create a new branch `[your-initials]-ajax-solution`
 - Run `$ npm install`
-- Run `$ npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && sequelize-cli db:seed:all`
+- Run `$ npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all`
 
 # Reminder
 ## Models
