@@ -45,6 +45,7 @@
   - **name**: String & Cannot be null
   - **importance**: Integer & Cannot be null
   - **received**: Boolean & Cannot be null
+  - **WishlistId**: Integer
 
 ## Associations
 - `Wishlist` has many `WishlistItems`
