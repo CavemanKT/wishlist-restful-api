@@ -1,0 +1,35 @@
+<ul class="pagination justify-content-center">
+  <% if (filters.page > 1) { %>
+    <li class="page-item"><a class="page-link" href="/wishlists?q=<%= filters.q %>&page=<%= 1 %>">First</a></li>
+  <% } %>
+
+  <% if (filters.page - 1 >= 1) { %>
+    <li class="page-item"><a class="page-link" href="/wishlists?q=<%= filters.q %>&page=<%= filters.page - 1 %>">Prev</a></li>
+  <% } %>
+
+  <% if (filters.page - 2 >= 1) { %>
+    <li class="page-item"><a class="page-link" href="/wishlists?q=<%= filters.q %>&page=<%= filters.page - 2 %>"><%= filters.page - 2 %></a></li>
+  <% } %>
+
+  <% if (filters.page - 1 >= 1) { %>
+    <li class="page-item"><a class="page-link" href="/wishlists?q=<%= filters.q %>&page=<%= filters.page - 1 %>"><%= filters.page - 1 %></a></li>
+  <% } %>
+
+  <li class="page-item active"><a class="page-link"><%= filters.page %></a></li>
+
+  <% if (filters.page + 1 <= filters.totalPages) { %>
+    <li class="page-item"><a class="page-link" href="/wishlists?q=<%= filters.q %>&page=<%= filters.page + 1 %>"><%= filters.page + 1 %></a></li>
+  <% } %>
+
+  <% if (filters.page + 2 <= filters.totalPages) { %>
+    <li class="page-item"><a class="page-link" href="/wishlists?q=<%= filters.q %>&page=<%= filters.page + 2 %>"><%= filters.page + 2 %></a></li>
+  <% } %>
+
+  <% if (filters.page + 1 <= filters.totalPages) { %>
+    <li class="page-item"><a class="page-link" href="/wishlists?q=<%= filters.q %>&page=<%= filters.page + 1 %>">Next</a></li>
+  <% } %>
+
+  <% if (filters.page < filters.totalPages) { %>
+    <li class="page-item"><a class="page-link" href="/wishlists?q=<%= filters.q %>&page=<%= filters.totalPages %>">Last</a></li>
+  <% } %>
+</ul>

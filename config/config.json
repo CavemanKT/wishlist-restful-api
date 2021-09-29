@@ -1,6 +1,8 @@
 {
   "development": {
-    "database": "lab_restful_api_development",
+    "username": "postgres",
+    "password": 12345678,
+    "database": "lab-restful-api",
     "host": "localhost",
     "dialect": "postgres"
   }

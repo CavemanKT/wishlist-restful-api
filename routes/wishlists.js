@@ -5,6 +5,9 @@ const { encodeArray, decodeArrayToObject } = require('../services/validation-que
 const { Router } = require('express')
 const router = Router()
 
+// Filtering and Pagination
+const { Op } = require("sequelize")
+
 // Validations
 const permittedChangeParams = {
   Wishlist: ['title', 'description', 'WishlistItem.name', 'WishlistItem.importance', 'WishlistItem.received'],
@@ -21,10 +24,27 @@ const changeValidation = [
 
 // INDEX GET /wishlists
 router.get('/', async function(req, res) {
-  const wishlists = await Wishlist.findAll({
-    order: [['createdAt', 'DESC']]
+  const { query } = req
+  const q = query.q || ''
+  const page = Number(query.page) || 1
+  const limit = 10
+  const offset = (page * limit) - limit
+
+  const results = await Wishlist.findAndCountAll({
+    where: {
+      title:{
+        [Op.iLike]: `%${q}%`
+      }
+    },
+    order: [['createdAt', 'ASC']],
+    limit,
+    offset
   })
-  res.render('wishlists/index', { wishlists })
+
+  res.render('wishlists/index', {
+    wishlists: results.rows,
+    filters: { q, page, totalPages: Math.ceil(results.count / limit) }
+  })
 })
 
 // CREATE POST /wishlists
@@ -39,7 +59,6 @@ router.post('/', changeValidation, async function(req, res) {
       association: Wishlist.WishlistItems
     }
   })
-
   res.redirect(`/wishlists/${newWishlist.id}`)
 })
 
@@ -109,6 +128,7 @@ router.put('/:id', changeValidation, async function(req, res) {
   await wishlist.update(wishlistParams, { fields: permittedChangeParams.Wishlist })
 
   await wishlist.setWishlistItems([])
+
   itemsParams.forEach(async function({ id: ItemId, ...itemParams }) {
     let wishlistItem = await WishlistItem.findOne({ where: { id: Number(ItemId) || 0 } })
 
