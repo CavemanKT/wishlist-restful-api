@@ -8,7 +8,8 @@
   $(document).ready(function() {
     const setModal = function(html) {
       const $modal = $('#modal')
-      const $modalContent = $modal.find('.modal-content')
+      const $modalContent = $modal.find('.modal-content')//<----- remember to console.log
+
       $modal.modal('show')
       $modalContent.html(html)
     }
@@ -25,45 +26,59 @@
         </div>
       `)
     }
-    $('#tweets-index').on('click', '.show-btn, .edit-btn, #new-btn', function(e) {
+
+    ///  split line ==================================================================
+
+    $('#wishlists-index').on('click', '.show-btn, .edit-btn, #new-btn', function(e) {              // <--- btn
+
       e.preventDefault()
       const $elem = $(e.target)
-      const url = $elem.data('url')
-      const method = $elem.data('method')
+      const url = $elem.data('url')                               //<-----
+      const method = $elem.data('method')                         //<-----//<----- remember to console.log
+
       setLoadingModal()
+
+      console.log('$elem: ', $elem , 'method: ', method, 'url: ', url);
+
       axios({ method, url }).then(function(resp) {
+        console.log('method: ', method, 'url: ', url, 'resp: ', resp);
         setModal(resp.data)
       })
     })
-    $('#tweets-index').on('click', '.delete-btn', function(e) {
+    $('#wishlists-index').on('click', '.delete-btn', function(e) {               //<-----
       e.preventDefault()
       const $elem = $(e.target)
-      const url = $elem.data('url')
-      $('#tweets-index .delete-btn').attr('disabled', true)
+      const url = $elem.data('url')                                            //<-----//<----- remember to console.log
+      // console.log('$elem: ',$elem, 'url: ', url);
+
+      $('#wishlists-index .delete-btn').attr('disabled', true)                      //<-----
+
       axios({ method: 'DELETE', url }).then(function(resp) {
-        $elem.parentsUntil('#tweets-list').remove()
+        $elem.parentsUntil('#wishlists-list').remove()                    //<-----
       }).catch(function(err) {
         alert(err.response.data.message)
       }).then(function() {
-        $('#tweets-index .delete-btn').attr('disabled', false)
+        $('#wishlists-index .delete-btn').attr('disabled', false)              //<-----
       })
     })
-    $('#modal').on('click', '#tweet-form-submit', function(e) {
+    $('#modal').on('click', '#wishlist-form-submit', function(e) {                      //<-----
       e.preventDefault()
       const $elem = $(e.target)
-      const url = $elem.data('url')
-      const method = $elem.data('method')
-      const formData = new FormData($('#modal form')[0])
-      $elem.attr('disabled', true)
+      const url = $elem.data('url')//<-----
+      const method = $elem.data('method')//<-----//<-----
+      const formData = new FormData($('#modal form')[0])                        //<-----
+
+      $elem.attr('disabled', true)                                                          //<----- remember to console.log
+
       axios({ method, url, data: formData }).then(function(resp) {
         setModal(resp.data)
         if (method === 'POST') {
           const id = $('#modal').find('.modal-title span').text()
-          $('#tweets-list').prepend(`
+          $('#wishlists-list').prepend(`
             <li class="my-1">
-              <a class="show-btn font-weight-bold" data-url="/api/tweets/${id}" data-method="GET">${id}</a>
-              <button class="edit-btn btn btn-info btn-sm" data-url="/api/tweets/${id}/edit" data-method="GET">Edit</button>
-              <button class="delete-btn btn btn-danger btn-sm" data-url="/api/tweets/${id}">Delete</button>
+              <a class="show-btn font-weight-bold" data-url="/wishlists/${id}" data-method="GET">${id}</a>
+              <button class="edit-btn btn btn-info btn-sm" data-url="/wishlists/${id}/edit" data-method="GET">Edit</button>
+              <button class="delete-btn btn btn-danger btn-sm" data-url="/wishlists/${id}">Delete</button>
             </li>
           `)
         }
@@ -71,7 +86,8 @@
         $elem.attr('disabled', false)
         const { response: { data: { errors } }} = err
         errors.forEach(function(error) {
-          const { param: fieldName, msg } = error
+          const { param: fieldName, msg } = error   //<----- remember to console.log
+
           const $input = $('#modal').find(`[name="${fieldName}"]`)
           const $invalidFeedback = $input.siblings('.invalid-feedback')
           $input.addClass('is-invalid')
@@ -85,7 +101,7 @@
 
 
 <%- contentFor('body') %>
-<div class="container my-3 text-center">
+<div id="wishlists-index" class="container my-3 text-center">
   <h1 class="mb-3">Wishlists</h1>
 
   <a class="btn btn-success btn-sm" href="/wishlists/new">New</a>
@@ -101,13 +117,13 @@
       </form>
     </div>
 
-    <ul class="list-unstyled">
+    <ul id="wishlists-list" class="list-unstyled">
       <% wishlists.forEach(function(wishlist){ %>
         <li class="my-1">
-          <a class="font-weight-bold" href="/wishlists/<%= wishlist.id %>"><%= wishlist.title %></a>
-          <a class="btn btn-info btn-sm" href="/wishlists/<%= wishlist.id %>/edit"><i class="fas fa-edit"></i></a>
+          <a class="show-btn font-weight-bold" href="/wishlists/<%= wishlist.id %>"><%= wishlist.title %></a>
+          <a class="edit-btn btn btn-info btn-sm" href="/wishlists/<%= wishlist.id %>/edit"><i class="fas fa-edit"></i></a>
           <form class="d-inline" action="/wishlists/<%= wishlist.id %>?_method=DELETE" method="POST">
-            <button class="btn btn-danger btn-sm" type="submit"><i class="fas fa-trash"></i></button>
+            <button class="delete-btn btn btn-danger btn-sm" data-url="wishlists/<%= wishlist.id %>"><i class="fas fa-trash"></i></button>
           </form>
         </li>
         <% }) %>

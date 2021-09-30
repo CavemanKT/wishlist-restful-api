@@ -1,7 +1,39 @@
-<form novalidate>
+<form id="wishlist-form" action="<%= action %>" method="POST" novalidate>
   <div class="form-group">
-    <label>Content</label>
-    <input class="form-control" type="text" name="content" value="<%= tweet.content %>">
-    <div class="invalid-feedback"></div>
+    <label>Title</label>
+    <input
+      class="form-control <%= formErrors.title ? 'is-invalid' : '' %>"
+      type="text"
+      name="title"
+      value="<%= wishlist.title %>"
+      required
+    >
+    <div class="invalid-feedback"><%= formErrors.title || 'Title is Required' %></div>
+  </div>
+
+  <div class="form-group">
+    <label>Description</label>
+    <input
+      class="form-control <%= formErrors.description ? 'is-invalid' : '' %>"
+      type="text"
+      name="description"
+      value="<%= wishlist.description %>"
+      required
+    >
+    <div class="invalid-feedback"><%= formErrors.description || 'Description is Required' %></div>
+  </div>
+
+  <ul class="list-group mb-3">
+    <% wishlist.WishlistItems.forEach(function(item, index) { %>
+      <%- include('form-wishlist-item-inputs', { item, index }) %>
+    <% }) %>
+    <li class="list-group-item text-center">
+      <button class="btn btn-info add-btn" type="button">Add Item</button>
+    </li>
+  </ul>
+
+  <div class="d-flex justify-content-between">
+    <a id="wishlist-form-cancel" class="btn btn-warning" href="/wishlists">Cancel</a>
+    <button id="wishlist-form-submit" class="btn btn-success" type="submit">Submit</button>
   </div>
 </form>

@@ -72,7 +72,7 @@ router.get('/new', async function(req, res) {
   })
   wishlist.WishlistItems.push(await WishlistItem.build())
 
-  res.render('wishlists/new', { wishlist, formErrors: decodeArrayToObject(errors) })
+  res.render('wishlists/new', { wishlist, formErrors: decodeArrayToObject(errors), layout: false })
 })
 
 // SHOW GET /wishlists/:id
@@ -86,9 +86,9 @@ router.get('/:id', async function(req, res) {
     order: [['WishlistItems', 'createdAt', 'DESC']]
   })
 
-  if (!wishlist) return res.render('not-found', { message: `Wishlist of ID ${id} not found!` })
+  if (!wishlist) return res.render('not-found', { message: `Wishlist of ID ${id} not found!`, layout: false })
 
-  res.render('wishlists/show', { wishlist })
+  res.render('wishlists/show', { wishlist, layout: false })
 })
 
 // DESTROY DELETE /wishlists/:id
@@ -100,12 +100,12 @@ router.delete('/:id', async function(req, res) {
       association: Wishlist.WishlistItems
     }
   })
-
-  if (!wishlist) return res.render('not-found', { message: `Wishlist of ID ${id} not found!` })
+  console.log('wishlist: ',wishlist);
+  if (!wishlist) return res.render('not-found', { message: `Wishlist of ID ${id} not found!`, layout: false })
 
   await wishlist.setWishlistItems([])
   await wishlist.destroy()
-  await WishlistItem.destroy({ where: { WishlistId: null } })
+  await WishlistItem.destroy({ where: { WishlistId: null }, layout: false })
 
   res.redirect('/wishlists')
 })
@@ -123,7 +123,7 @@ router.put('/:id', changeValidation, async function(req, res) {
     where: { id: WishlistId },
     include: Wishlist.WishlistItems
   })
-  if (!wishlist) return res.render('not-found', { message: `Wishlist of ID ${id} not found!` })
+  if (!wishlist) return res.render('not-found', { message: `Wishlist of ID ${id} not found!`, layout: false })
 
   await wishlist.update(wishlistParams, { fields: permittedChangeParams.Wishlist })
 
@@ -153,9 +153,9 @@ router.get('/:id/edit', async function(req, res) {
     include: Wishlist.WishlistItems
   })
 
-  if (!wishlist) return res.render('not-found', { message: `Wishlist of ID ${id} not found!` })
+  if (!wishlist) return res.render('not-found', { message: `Wishlist of ID ${id} not found!`, layout: false })
 
-  res.render('wishlists/edit', { wishlist, formErrors: decodeArrayToObject(errors) })
+  res.render('wishlists/edit', { wishlist, formErrors: decodeArrayToObject(errors), layout: false })
 })
 
 module.exports = router

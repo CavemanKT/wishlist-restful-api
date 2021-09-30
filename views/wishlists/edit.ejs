@@ -1,11 +1,10 @@
-<div class="modal-header">
-  <h5 class="modal-title">Edit Tweet <%= tweet.id %></h5>
-  <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-</div>
-<div class="modal-body">
-  <%- include('../_partials/form') %>
-</div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
-  <button id="tweet-form-submit" type="button" class="btn btn-success" data-url="/api/tweets/<%= tweet.id %>" data-method="PUT">Submit</button>
-</div>
+
+  <div class="modal-header">
+    <h1 class="modal-title"><%= wishlist.title %></h1>
+    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+    <h2><%= wishlist.createdAt.toISOString().slice(0, 10) %></h2>
+  </div>
+
+  <div class="modal-body">
+    <%- include('../_partials/wishlists/form', { action: `/wishlists/${wishlist.id}?_method=PUT` }) %>
+  </div>
