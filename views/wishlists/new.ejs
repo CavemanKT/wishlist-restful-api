@@ -10,5 +10,11 @@
       <div class="col-12 col-sm-10 offset-sm-1 col-md-6 offset-md-3">
         <%- include('../_partials/wishlists/form', { action: '/wishlists?_method=POST' }) %>
       </div>
+
     </div>
+  </div>
+
+  <div class="d-flex justify-content-between modal-footer">
+    <button class="btn btn-warning" type="button" data-dismiss="modal">Close</button>
+    <button id="wishlist-form-submit" type="button" class="btn btn-success" data-url="/wishlists" data-method="POST">Submit</button>
   </div>

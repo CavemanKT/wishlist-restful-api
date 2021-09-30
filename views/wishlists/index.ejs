@@ -30,7 +30,6 @@
     ///  split line ==================================================================
 
     $('#wishlists-index').on('click', '.show-btn, .edit-btn, #new-btn', function(e) {              // <--- btn
-
       e.preventDefault()
       const $elem = $(e.target)
       const url = $elem.data('url')                               //<-----
@@ -79,10 +78,10 @@
           $('#wishlists-list').prepend(`
             <li class="my-1">
               <a class="show-btn font-weight-bold" data-url="/wishlists/${id}" data-method="GET">${id}</a>
-              <button class="edit-btn btn btn-info btn-sm" data-url="/wishlists/${id}/edit" data-method="GET"><i class="fas fa-edit"></i></button>
+              <button class="edit-btn btn btn-info btn-sm" data-url="/wishlists/${id}/edit" data-method="GET"><i class="fas fa-edit" style="pointer-events: none;"></i></button>
 
               <form class="d-inline" action="/wishlists/${id}?_method=DELETE" method="POST">
-                <button class="delete-btn btn btn-danger btn-sm" type="submit" data-url="wishlists/${id}"><i class="fas fa-trash"></i></button>
+                <button class="delete-btn btn btn-danger btn-sm" type="submit" data-url="wishlists/${id}"><i class="fas fa-trash" style="pointer-events: none;"></i></button>
               </form>
             </li>
           `)
@@ -103,8 +102,6 @@
   })
 </script>
 
-
-
 <%- contentFor('body') %>
 <div id="wishlists-index" class="container my-3 text-center">
   <h1 class="mb-3">Wishlists</h1>
@@ -122,19 +119,15 @@
       </form>
     </div>
 
-
-
     <ul id="wishlists-list" class="list-unstyled">
       <% wishlists.forEach(function(wishlist){ %>
         <li class="my-1">
           <a class="show-btn font-weight-bold" data-url="/wishlists/<%= wishlist.id %>" data-method="GET"><%= wishlist.title %></a>
 
-
-          <a class="edit-btn btn btn-info btn-sm" data-url="/wishlists/<%= wishlist.id %>/edit" data-method="GET"><i class="fas fa-edit"></i></a>
-
+          <a class="edit-btn btn btn-info btn-sm" data-url="/wishlists/<%= wishlist.id %>/edit" data-method="GET"><i class="fas fa-edit" style="pointer-events: none;"></i></a>
 
           <form class="d-inline" action="/wishlists/<%= wishlist.id %>?_method=DELETE" method="POST">
-            <button class="delete-btn btn btn-danger btn-sm" type="submit" data-url="wishlists/<%= wishlist.id %>"><i class="fas fa-trash"></i></button>
+            <button class="delete-btn btn btn-danger btn-sm" type="submit" data-url="wishlists/<%= wishlist.id %>"><i class="fas fa-trash" style="pointer-events: none;"></i></button>
           </form>
         </li>
         <% }) %>

@@ -8,3 +8,8 @@
   <div class="modal-body">
     <%- include('../_partials/wishlists/form', { action: `/wishlists/${wishlist.id}?_method=PUT` }) %>
   </div>
+
+  <div class="d-flex justify-content-between modal-footer">
+    <button class="btn btn-warning" type="button" data-dismiss="modal">Close</button>
+    <button id="wishlist-form-submit" type="button" class="btn btn-success" data-url="/wishlists/<%= wishlist.id %> " data-method="PUT">Submit</button>
+  </div>

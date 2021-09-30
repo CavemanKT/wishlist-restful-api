@@ -117,19 +117,17 @@ router.put('/:id', changeValidation, async function(req, res) {
     body: { WishlistItems: itemsParams, ...wishlistParams }
   } = req
   const errors = validationResult(req)
-  if (!errors.isEmpty()) return res.redirect(encodeArray(`/wishlists/${WishlistId}/edit`, errors))
+  if (!errors.isEmpty()) return res.render({ message: `Wishlist of ID ${id} not found!`, layout: false })
 
   const wishlist = await Wishlist.findOne({
     where: { id: WishlistId },
     include: Wishlist.WishlistItems
   })
-  if (!wishlist) return res.render('not-found', { message: `Wishlist of ID ${id} not found!`, layout: false })
+  if (!wishlist) return res.render({ message: `Wishlist of ID ${id} not found!`, layout: false})
 
   await wishlist.update(wishlistParams, { fields: permittedChangeParams.Wishlist })
-
   await wishlist.setWishlistItems([])
-
-  itemsParams.forEach(async function({ id: ItemId, ...itemParams }) {
+  for (const { ItemId, ...itemParams } of itemsParams) {
     let wishlistItem = await WishlistItem.findOne({ where: { id: Number(ItemId) || 0 } })
 
     if (wishlistItem) {
@@ -139,10 +137,10 @@ router.put('/:id', changeValidation, async function(req, res) {
     }
 
     await wishlist.addWishlistItem(wishlistItem)
-  })
+  }
   await WishlistItem.destroy({ where: { WishlistId: null } })
 
-  res.redirect(`/wishlists/${wishlist.id}`)
+  res.render(`wishlists/show`, { wishlist, layout: false})
 })
 
 // EDIT GET /wishlists/:id/edit

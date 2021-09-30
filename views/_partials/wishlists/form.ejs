@@ -1,4 +1,5 @@
-<form id="wishlist-form" action="<%= action %>" method="POST" novalidate>
+<script src="/js/wishlists/input-control.js"></script>
+<form id="wishlist-form" novalidate>
   <div class="form-group">
     <label>Title</label>
     <input
@@ -31,9 +32,4 @@
       <button class="btn btn-info add-btn" type="button">Add Item</button>
     </li>
   </ul>
-
-  <div class="d-flex justify-content-between">
-    <a id="wishlist-form-cancel" class="btn btn-warning" href="/wishlists">Cancel</a>
-    <button id="wishlist-form-submit" class="btn btn-success" type="submit">Submit</button>
-  </div>
 </form>
