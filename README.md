@@ -180,4 +180,4 @@ views
 ![Screen](https://i.imgur.com/TCv7598.png)
 
 ## Wishlists Show Modal
-![Screen](https://i.imgur.com/3d6hDgT.png)
+![Screen](https://i.imgur.com/3d6hDgT.png)# wishlist-restful-api
