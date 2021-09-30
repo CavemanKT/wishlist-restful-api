@@ -1,20 +1,14 @@
-<%- contentFor('meta') %>
-<title>Wishlist New</title>
 
-<%- contentFor('styles') %>
 
-<%- contentFor('scripts') %>
-<script src="/js/wishlists/input-control.js" defer></script>
-
-<%- contentFor('body') %>
-<div class="container my-3">
-  <div class="text-center mb-3">
-    <h1 class="mb-3">New Wishlist</h1>
+  <div class="modal-header">
+    <h1 class="modal-title mb-3">New Wishlist</h1>
+    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
   </div>
 
-  <div class="row">
-    <div class="col-12 col-sm-10 offset-sm-1 col-md-6 offset-md-3">
-      <%- include('../_partials/wishlists/form', { action: '/wishlists?_method=POST' }) %>
+  <div class="modal-body text-center mb-3">
+    <div class="row">
+      <div class="col-12 col-sm-10 offset-sm-1 col-md-6 offset-md-3">
+        <%- include('../_partials/wishlists/form', { action: '/wishlists?_method=POST' }) %>
+      </div>
     </div>
   </div>
-</div>

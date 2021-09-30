@@ -2,8 +2,8 @@
   <div class="modal-header">
     <h1 class="modal-title"><%= wishlist.title %></h1>
     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-    <h2><%= wishlist.createdAt.toISOString().slice(0, 10) %></h2>
   </div>
+  <h2><%= wishlist.createdAt.toISOString().slice(0, 10) %></h2>
 
   <div class="modal-body">
     <%- include('../_partials/wishlists/form', { action: `/wishlists/${wishlist.id}?_method=PUT` }) %>
